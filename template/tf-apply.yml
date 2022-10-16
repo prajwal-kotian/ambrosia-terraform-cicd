@@ -1,0 +1,44 @@
+parameters:
+    tf_version: ''
+    chosen_deployment: ''
+    repository: ''
+    tfstatebucket : ''
+    a_key : ''
+    s_key : ''
+
+steps:
+-   script: |
+        echo $(Build.Repository.LocalPath)/infrastructure/${{parameters.chosen_deployment}}
+        cd $(Build.Repository.LocalPath)/infrastructure/${{parameters.chosen_deployment}}
+        pwd
+        ls -la
+        wget --quiet https://releases.hashicorp.com/terraform/${{parameters.tf_version}}/terraform_${{parameters.tf_version}}_linux_amd64.zip
+        unzip terraform_${{parameters.tf_version}}_linux_amd64.zip
+        rm terraform_${{parameters.tf_version}}_linux_amd64.zip
+        terraform version
+    displayName: Install Terraform
+
+-   script: |
+        cd $(Build.Repository.LocalPath)/infrastructure/${{parameters.chosen_deployment}}
+        wget --quiet "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" 
+        unzip awscli-exe-linux-x86_64.zip
+        sudo ./aws/install --update
+        aws configure set aws_access_key_id ${{parameters.a_key}}
+        aws configure set aws_secret_access_key ${{parameters.s_key}}
+        aws configure set region us-east-1
+        rm awscli-exe-linux-x86_64.zip
+    displayName: Install & confiure aws cli    
+
+-   script: |
+        cd $(Build.Repository.LocalPath)/infrastructure/${{parameters.chosen_deployment}}
+        terraform init -upgrade \
+        -var-file=terraform.tfvars
+    displayName : Initilaize Terraform
+
+-   script: |
+        cd $(Build.Repository.LocalPath)/infrastructure/${{parameters.chosen_deployment}}
+        ./terraform validate
+        ./terraform apply \
+        -auto-approve \
+        -var-file=terraform.tfvars
+    displayName : Terraform Apply

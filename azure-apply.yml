@@ -1,0 +1,92 @@
+trigger: 
+- none
+
+resources:
+    repositories:
+    -   repository: AzureRepo
+        name: AzureTest/AzureRepo
+        type: git
+        ref: main
+
+parameters: 
+-   name: chosen_deployment
+    displayName: choose deployment
+    type: string
+    default: default_deployment
+    values : 
+    -   default_deployment
+    -   project_deployment
+
+variables:
+- group: ${{ parameters.chosen_deployment }}
+
+pool : 
+    vmImage: 'ubuntu-latest'
+
+stages: 
+-   stage : tf_plan
+    jobs:
+    -   job: tf_plan
+        displayName : "Terraform plan stage"
+        steps:
+        -   task: replacetokens@5
+            inputs:
+                targetFiles: '**/*.tfvars'
+                encoding: 'auto'
+                tokenPattern: 'default'
+                writeBOM: true
+                actionOnMissing: 'warn'
+                keepToken: false
+                actionOnNoFiles: 'continue'
+                enableTransforms: false
+                enableRecursion: false
+                useLegacyPattern: false
+                enableTelemetry: true
+
+        -   template: template/tf-plan.yml@AzureRepo
+            parameters:
+                repository: $(repository)
+                chosen_deployment : $(chosen_deployment)
+                tf_version: $(tf_version)
+                a_key: $(a_key)
+                s_key: $(s_key)
+
+-   stage : tf_apply
+    dependsOn: 
+    -   tf_plan
+    jobs:
+    -   deployment: tf_apply
+        environment: "PipelineApproval"
+        displayName : "Terraform apply stage"
+        timeoutInMinutes: 30
+        strategy:
+            runOnce:
+                deploy:
+                    steps:
+                    -   checkout: self
+                    -   task: replacetokens@5
+                        inputs:
+                            targetFiles: '**/*.tfvars'
+                            encoding: 'auto'
+                            tokenPattern: 'default'
+                            writeBOM: true
+                            actionOnMissing: 'warn'
+                            keepToken: false
+                            actionOnNoFiles: 'continue'
+                            enableTransforms: false
+                            enableRecursion:  false
+                            useLegacyPattern: false
+                            enableTelemetry: true
+
+                    -   template: template/tf-apply.yml@AzureRepo
+                        parameters:
+                            repository: $(repository)
+                            chosen_deployment : $(chosen_deployment)
+                            tf_version: $(tf_version)
+                            a_key: $(a_key)
+                            s_key: $(s_key)
+                    
+                                
+
+
+
