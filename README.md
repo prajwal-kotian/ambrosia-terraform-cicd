@@ -9,7 +9,7 @@
 	The project architecture to be deployed on AWS is described in the image 1.
 <figcaption align = "left"><b>Image 1 : <i>AWS  Architecture Diagram</i> </b></figcaption>
  
-![Image 1 :AWS  Architecture Diagram](./images-ambrosia/Architecture%20Diagram.png)
+![Image 1 :AWS  Architecture Diagram](./Images-ambrosia/Architecture%20Diagram.png)
 
 
 ### c. Tools used for development:
@@ -27,7 +27,7 @@
 -    Present within : website.tf.
 <figcaption align = "left"><b>Image 2 : <i>Website</i> </b></figcaption>
 
-![Image 2 :Website](./images-ambrosia/site.png)
+![Image 2 :Website](./Images-ambrosia/site.png)
 &nbsp; 
 
 
@@ -38,7 +38,7 @@
 - Present within : backend.tf.
 <figcaption align = "left"><b>Image 3 : <i>SES Notification</i> </b></figcaption>
 
-![Image 3: SES Notification](./images-ambrosia/notification.png)
+![Image 3: SES Notification](./Images-ambrosia/notification.png)
 &nbsp; 
 
 ### c. Security: 
@@ -62,28 +62,28 @@
 
 <figcaption align = "left"><b>Image 4 : <i>Azure DevOps Pipelines</i></b></figcaption>
 
-![Image 4: Azure DevOps Pipelines](./images-ambrosia/Empty%20Pipelines.png)
+![Image 4: Azure DevOps Pipelines](./Images-ambrosia/Empty%20Pipelines.png)
 &nbsp; 
 
 - Azure pipeline YAML was written to streamline the deployment procedure. When the pipeline is to be deployed, it will present options naming the deployments currently available. These separate deployments can share a state file and operate independently from each other.
 
 <figcaption align = "left"><b>Image 5 : <i>Deployment choices</i></b></figcaption>
 
-![Image 5 :Deployment choices](./images-ambrosia/deployment%20choices.png)
+![Image 5 :Deployment choices](./Images-ambrosia/deployment%20choices.png)
 &nbsp; 
 
 - Azure pipelines can rely on predefined or marketplace tasks to perform certain actions. In this project we use a marketplace task called replace tokens and we also reference command line script templates written specifically for this deployment. 
 
 <figcaption align = "left"><b>Image 6 : <i>Pipeline tasks</i></b></figcaption>
 
-![Image 6 :Pipeline tasks](./images-ambrosia/Pipeline%20tasks.png)
+![Image 6 :Pipeline tasks](./Images-ambrosia/Pipeline%20tasks.png)
 &nbsp; 
 
 - For the purposes of debugging, each step taken by the Azure DevOps pipeline can have its log preserved for 30 days by default. Taking terraform as a reference these logs can describe the Terraform plan. 
 
 <figcaption align = "left"><b>Image 7 : <i>Pipeline logs</i></b></figcaption>
 
-![Image 7 :Pipeline logs](./images-ambrosia/Pipeline%20logs%20apply.png)
+![Image 7 :Pipeline logs](./Images-ambrosia/Pipeline%20logs%20apply.png)
 &nbsp; 
 
 ### c. Azure DevOps Variable groups & replace tokens:
@@ -91,14 +91,14 @@
 
 <figcaption align = "left"><b>Image 8 : <i>Variable groups</i></b></figcaption>
 
-![Image 8 :Variable groups](./images-ambrosia/library.png)
+![Image 8 :Variable groups](./Images-ambrosia/library.png)
 &nbsp; 
 
 - Replace tokens task allows variables from variable groups to be passed into the Terraform code, thus allowing us to pass sensitive variables such as passwords within the Terraform code as secrets. 
 
 <figcaption align = "left"><b>Image 9 : <i>Replace Tokens</i></b></figcaption>
 
-![Image 9 :Replace Tokens](./images-ambrosia/replace%20token.png)
+![Image 9 :Replace Tokens](./Images-ambrosia/replace%20token.png)
 &nbsp; 
 
 ### d. Azure DevOps Environments:
@@ -107,12 +107,12 @@
 
 <figcaption align = "left"><b>Image 10 : <i>Pipeline stages</i></b></figcaption>
 
-![Image 10 :Pipeline stages](./images-ambrosia/stages.png)
+![Image 10 :Pipeline stages](./Images-ambrosia/stages.png)
 &nbsp; 
 
 - While progressing from one stage to another, for eg. from tf_plan to tf_apply, an approval requirement has been added so that the pipeline is restricted to only the planning stage and cannot deploy or destroy any resources. 
 
 <figcaption align = "left"><b>Image 11 : <i>Stage approval</i></b></figcaption>
 
-![Image 11 :Stage approval](./images-ambrosia/stages.png)
+![Image 11 :Stage approval](./Images-ambrosia/stages.png)
 &nbsp; 
