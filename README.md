@@ -114,5 +114,5 @@
 
 <figcaption align = "left"><b>Image 11 : <i>Stage approval</i></b></figcaption>
 
-![Image 11 :Stage approval](./Images-ambrosia/stages.png)
+![Image 11 :Stage approval](./Images-ambrosia/approval%20short.png)
 &nbsp; 
