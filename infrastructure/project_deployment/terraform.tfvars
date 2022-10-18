@@ -11,7 +11,7 @@ dynamodb_hash_key       = "UserId"
 dynamodb_range_key      = "OrderType"
 ttl                     = 30
 
- s3_acl_privacy            = "private"
+s3_acl_privacy            = "private"
 geo_restriction_whitelist = ["US", "IN"]
 index_document            = "index.html"
 
